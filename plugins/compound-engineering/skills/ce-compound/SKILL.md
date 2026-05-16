@@ -46,6 +46,7 @@ These files are the durable contract for the workflow. Read them on-demand at th
 
 - `references/schema.yaml` — canonical frontmatter fields and enum values (read when validating YAML)
 - `references/yaml-schema.md` — category mapping from problem_type to directory (read when classifying)
+- `references/concepts-vocabulary.md` — CONCEPTS.md format and inclusion rules (read in Phase 2.4 when domain terms surface)
 - `assets/resolution-template.md` — section structure for new docs (read when assembling)
 
 When spawning subagents, pass the relevant file contents into the task prompt so they have the contract without needing cross-skill paths.
@@ -246,6 +247,14 @@ When creating a new doc, preserve the section order from `assets/resolution-temp
 
 </sequential_tasks>
 
+### Phase 2.4: Vocabulary Capture
+
+After writing the learning, scan the new doc and the surrounding conversation for **domain terms** — words used with project-specific precise meaning (entities, named processes, status concepts). If `CONCEPTS.md` exists at repo root, add missing qualifying terms and refine existing entries when new precision surfaced. If it does not exist and the learning surfaced at least one qualifying term, create it lazily. If no terms qualify, skip this phase entirely.
+
+**Apply edits silently in every mode — no user prompt in interactive, lightweight, or headless.** Vocabulary capture is a side effect of compounding, not a decision the user makes per run.
+
+Read `references/concepts-vocabulary.md` for the inclusion criteria, what never belongs, per-entry quality bar, organization principle, and an illustrative example. Do not infer the format from memory — read the reference each time vocabulary capture fires, so the rules and example stay anchored.
+
 ### Phase 2.5: Selective Refresh Check
 
 After writing the new learning, decide whether this new solution is evidence that older docs should be refreshed.
@@ -328,6 +337,14 @@ After the learning is written and the refresh decision is made, check whether th
       `docs/solutions/` — documented solutions to past problems (bugs, best practices, workflow patterns), organized by category with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging in documented areas.
       ```
    c. In full interactive mode, explain to the user why this matters — agents working in this repo (including fresh sessions, other tools, or collaborators without the plugin) won't know to check `docs/solutions/` unless the instruction file surfaces it. Show the proposed change and where it would go, then use the platform's blocking question tool to get consent before making the edit: `AskUserQuestion` in Claude Code (call `ToolSearch` with `select:AskUserQuestion` first if its schema isn't loaded), `request_user_input` in Codex, `ask_user` in Gemini, `ask_user` in Pi (requires the `pi-ask-user` extension). Fall back to presenting the proposal in chat only when no blocking tool exists in the harness or the call errors (e.g., Codex edit modes) — not because a schema load is required. Never silently skip the question. In lightweight mode, output a one-liner note and move on. In headless mode, apply the edit directly without prompting and surface it in the terminal report under "Instruction-file edit"
+
+5. **If `CONCEPTS.md` exists at repo root, run a parallel discoverability check for it.** Assess whether the instruction file would lead an agent to discover the project's shared domain vocabulary. Use the same workflow as the `docs/solutions/` check above: same target file, same edit-placement judgment, same consent-then-edit interaction shape per mode. A line in an existing section is almost always better than a new headed section. Example calibration when nothing else fits:
+
+   ```
+   CONCEPTS.md  # shared domain vocabulary (entities, named processes, status concepts) — relevant when orienting to the codebase or discussing domain concepts
+   ```
+
+   **Skip this step entirely if `CONCEPTS.md` does not exist** — never nag for an artifact the project has not adopted. When skipped, this step produces no output and no edit.
 
 ### Phase 3: Optional Enhancement
 
@@ -469,6 +486,7 @@ Track: <bug | knowledge>
 Category: <category>
 Overlap: <none | low | moderate — see <path> | high — existing doc updated>
 Instruction-file edit: <none needed | applied to <path> | gap noted, not applied>
+CONCEPTS.md: <skipped (no qualifying terms) | created with N entries | updated — N added, N refined>
 Refresh recommendation: <none | scope hint for /ce-compound-refresh>
 
 Documentation complete
@@ -503,8 +521,9 @@ Specialized Agent Reviews (Auto-Triggered):
   ✓ ce-kieran-rails-reviewer: Code examples meet Rails conventions
   ✓ ce-code-simplicity-reviewer: Solution is appropriately minimal
 
-File created:
-- docs/solutions/performance-issues/n-plus-one-brief-generation.md
+Files written:
+- docs/solutions/performance-issues/n-plus-one-brief-generation.md (created)
+- CONCEPTS.md (created with 3 entries: BriefSystem, EmailQueue, Brief Status)
 
 This documentation will be searchable for future reference when similar
 issues occur in the Email Processing or Brief System modules.

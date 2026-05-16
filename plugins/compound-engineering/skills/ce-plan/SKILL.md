@@ -234,6 +234,7 @@ Prepare a concise planning context summary (a paragraph or two) to pass as input
 - If an origin document exists, summarize the problem frame, requirements, and key decisions from that document
 - Otherwise use the feature description directly
 - If `STRATEGY.md` exists, read it and include the relevant pieces (target problem, approach, active tracks) in the summary so downstream research and planning decisions are anchored to product strategy
+- If `CONCEPTS.md` exists at repo root, read it directly — its definitions are the canonical names for domain entities, named processes, and status concepts. Plan with those terms rather than synonyms. (ce-learnings-researcher also reads it as grounding, but a direct read at plan-start ensures the plan body uses the exact vocabulary.)
 
 Run these agents in parallel:
 
@@ -638,6 +639,8 @@ Plan written to <absolute path to plan>
 ```
 
 **Pipeline mode:** If invoked from an automated workflow such as LFG or any `disable-model-invocation` context, skip interactive questions. Make the needed choices automatically and proceed to writing the plan.
+
+**CONCEPTS.md gap-fill (only if the file already exists):** If `CONCEPTS.md` exists at repo root and the plan body uses a domain term whose definition is missing from `CONCEPTS.md`, add the entry. Follow the format and quality bar set by the existing entries — the file teaches its own conventions by example. Skip this step entirely if `CONCEPTS.md` does not exist; ce-plan is a contributor to existing vocabulary, not a creator of the file. Creation is owned by ce-compound and ce-compound-refresh. Apply silently — no user prompt.
 
 #### 5.3 Confidence Check and Deepening
 
