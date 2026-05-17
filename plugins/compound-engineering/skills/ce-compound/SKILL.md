@@ -1,6 +1,6 @@
 ---
 name: ce-compound
-description: Document a recently solved problem to compound your team's knowledge
+description: Document a recently solved problem to compound your team's knowledge or CONCEPTS.md, the project's shared domain vocabulary.
 argument-hint: "[optional: brief context] [mode:headless] "
 ---
 
@@ -22,6 +22,10 @@ Captures problem solutions while context is fresh, creating structured documenta
 /ce-compound mode:headless              # Non-interactive run for automations
 /ce-compound mode:headless [context]    # Non-interactive run with context hint
 ```
+
+## CONCEPTS.md bootstrap requests
+
+If invoked to create or bootstrap `CONCEPTS.md` rather than document a solved problem, do not run normal phases. Explain: the file accretes as ce-compound and ce-compound-refresh process real learnings; cold-start codebase scans aren't supported because the qualifying bar is judgmental. Redirect to ce-compound on a real learning, ce-compound-refresh on an existing corpus, or direct hand-editing. Then exit.
 
 ## Mode Detection
 
