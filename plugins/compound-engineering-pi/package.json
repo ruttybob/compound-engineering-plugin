@@ -1,0 +1,10 @@
+{
+  "name": "compound-engineering-pi",
+  "version": "1.0.0",
+  "description": "Compound Engineering plugin adapted for pi coding agent. AI-powered development tools for code review, research, design, and workflow automation.",
+  "keywords": ["pi-package"],
+  "pi": {
+    "skills": ["./skills"],
+    "prompts": ["./prompts"]
+  }
+}
